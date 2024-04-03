@@ -1,0 +1,30 @@
+plugins {
+    id 'java'
+    id "org.checkerframework" version "0.6.37"
+}
+
+group = 'it.ziopagnotta'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compileOnly ("org.projectlombok:lombok:1.18.32")
+    annotationProcessor ("org.projectlombok:lombok:1.18.32")
+
+    testCompileOnly ("org.projectlombok:lombok:1.18.32")
+    testAnnotationProcessor ("org.projectlombok:lombok:1.18.32")
+
+    //implementation("com.google.code.gson:gson:2.10.1")
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
