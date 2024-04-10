@@ -1,4 +1,7 @@
 .gradle
+.idea
+gradlew.bat
+gradle.properties
 **/build/
 !src/**/build/
 
