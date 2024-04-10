@@ -9,8 +9,11 @@ import it.ziopagnotta.api.team.GameTeamManager;
 import it.ziopagnotta.api.userdata.UserDataHolder;
 import lombok.Getter;
 import lombok.Setter;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -26,6 +29,9 @@ public class Game extends PropertyHolder {
     private final GamePhaseManager gamePhaseManager;
     private final GameKitManager gameKitManager;
 
+    private final Duration duration;
+    private final Instant startInstant;
+
     @Setter private Runnable startAction, stopAction;
 
     protected Game(String identifier,
@@ -34,6 +40,7 @@ public class Game extends PropertyHolder {
                    GameTeamManager gameTeamManager,
                    GamePhaseManager gamePhaseManager,
                    GameKitManager gameKitManager,
+                   Duration duration,
                    Runnable startAction,
                    Runnable stopAction) {
         this.identifier = identifier;
@@ -43,6 +50,9 @@ public class Game extends PropertyHolder {
         this.gameTeamManager = gameTeamManager;
         this.gamePhaseManager = gamePhaseManager;
         this.gameKitManager = gameKitManager;
+
+        this.startInstant = Instant.now();
+        this.duration = duration;
 
         this.startAction = startAction;
         this.stopAction = stopAction;
@@ -91,6 +101,7 @@ public class Game extends PropertyHolder {
 
     public static class Builder {
         private final String identifier;
+        private final Duration duration;
         private boolean enabled;
 
         private Runnable startAction, stopAction;
@@ -99,8 +110,9 @@ public class Game extends PropertyHolder {
         private GamePhaseManager gamePhaseManager;
         private GameKitManager gameKitManager;
 
-        public Builder(String identifier) {
+        public Builder(@NonNull String identifier, @NonNull Duration duration) {
             this.identifier = identifier;
+            this.duration = duration;
         }
 
         public Builder enabled(boolean enabled) {
@@ -150,6 +162,7 @@ public class Game extends PropertyHolder {
                     gameTeamManager,
                     gamePhaseManager,
                     gameKitManager,
+                    duration,
                     startAction,
                     stopAction);
         }

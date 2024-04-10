@@ -47,9 +47,9 @@ public class PropertyHolder {
     public <T> T getProperty(@NonNull String identifier, @NonNull Class<T> clazz) {
         Property<?> property = properties.getOrDefault(identifier, null);
 
-        if(property == null || !clazz.isInstance(property.getValue()))
+        if(property == null || !clazz.isInstance(property.value()))
             throw new InputMismatchException("Cannot get the property, probably not found or cast exception, provided identifier: " + identifier);
 
-        return clazz.cast(property.getValue());
+        return clazz.cast(property.value());
     }
 }

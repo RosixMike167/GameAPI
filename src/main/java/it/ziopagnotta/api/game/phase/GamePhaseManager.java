@@ -1,10 +1,10 @@
 package it.ziopagnotta.api.game.phase;
 
-import it.ziopagnotta.api.property.PropertyHolder;
 import lombok.Getter;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+import java.time.Duration;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -27,19 +27,12 @@ public class GamePhaseManager {
         return gamePhases.containsKey(identifier);
     }
 
-    public void add(String identifier, Runnable action, Runnable leaveAction) {
+    public void add(String identifier, Duration duration, Runnable action, Runnable leaveAction) {
         if(exists(identifier))
             throw new UnsupportedOperationException("Cannot add a new game phase, identifier already exists: " + identifier);
 
 
-        gamePhases.put(identifier, new GamePhaseImpl(identifier, action, leaveAction));
-    }
-
-    public void add(String identifier, Runnable action, Runnable leaveAction, PropertyHolder properties) {
-        if(exists(identifier))
-            throw new UnsupportedOperationException("Cannot add a new game phase, identifier already exists: " + identifier);
-
-        gamePhases.put(identifier, new GamePhaseImpl(identifier, action, leaveAction, properties));
+        gamePhases.put(identifier, new GamePhaseImpl(identifier, duration, action, leaveAction));
     }
 
     public void remove(String identifier) {
@@ -67,7 +60,7 @@ public class GamePhaseManager {
                 .dropWhile(gamePhase -> gamePhase.getIdentifier().equals(currentPhase.getIdentifier()))
                 .skip(1)
                 .findFirst()
-                .orElse(null);
+                .orElse(getPhase(PhaseType.LAST));
     }
 
     @Nullable
@@ -77,7 +70,7 @@ public class GamePhaseManager {
         return gamePhases.values().stream()
                 .takeWhile(gamePhase -> gamePhase.getIdentifier().equals(currentPhase.getIdentifier()))
                 .reduce((first, second) -> second)
-                .orElse(null);
+                .orElse(getPhase(PhaseType.FIRST));
     }
 
     @Nullable
